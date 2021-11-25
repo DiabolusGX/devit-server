@@ -12,8 +12,6 @@ passport.deserializeUser(function (id, done) {
 	User.findOne({ id }, (err, user) => done(err, user));
 });
 
-console.log(config.google);
-
 // Set up Passport Google Strategy
 passport.use(
 	new GoogleStrategy(
@@ -25,25 +23,36 @@ passport.use(
 		},
 		async (request, accessToken, refreshToken, profile, cb) => {
 			try {
-				email = profile.emails[0].value;
-				console.log(email);
+				const email = profile.emails[0].value;
+
+				// validate email
+				if (!email.endsWith("@vitbhopal.ac.in")) {
+					return cb("", null);
+				}
+
 				const user = await User.findOne({ email });
+
 				if (user) return cb(null, user);
 				else {
+					// get name and year from email
+					const username = email.substring(0, email.indexOf("@"));
+					const displayName = username
+						.slice(0, -4)
+						.replaceAll(".", " ");
+					const batchYear = username.slice(-4);
+					const avatar = profile.photos[0]?.value;
+
 					const user = await User.create({
-						email: email,
-						username: "diabolusgx",
-						displayName: profile.displayName,
-						avatar: profile.photos[0]?.value,
-						batchYear: "2018",
+						email,
+						username,
+						displayName,
+						batchYear,
+						avatar,
 					});
 					return cb(null, user);
 				}
 			} catch (err) {
-				console.error(
-					"Something went wrong while logging the user in:\n",
-					err
-				);
+				console.error("Error while logging the user in:\n", err);
 				return cb(err);
 			}
 		}

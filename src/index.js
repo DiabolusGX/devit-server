@@ -53,8 +53,8 @@ app.get(
 app.get(
 	"/auth/google/redirect",
 	passport.authenticate("google", {
-		successRedirect: `http://${config.client.hostname}:${config.client.port}/`,
-		failureRedirect: `http://${config.client.hostname}:${config.client.port}/`,
+		successRedirect: `http://${config.client.hostname}:${config.client.port}/success`,
+		failureRedirect: `http://${config.client.hostname}:${config.client.port}/failure`,
 	})
 );
 
