@@ -11,6 +11,7 @@
     "express": "^4.17.1",
     "helmet": "^4.6.0",
     "mongoose": "^6.0.13",
-    "passport": "^0.5.0"
+    "passport": "^0.5.0",
+    "passport-google-oauth2": "^0.2.0"
   }
 }

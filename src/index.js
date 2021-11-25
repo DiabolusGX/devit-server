@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+require("./strategies/google");
 
 const helmet = require("helmet");
 const passport = require("passport");
@@ -7,9 +8,6 @@ const mongoose = require("mongoose");
 const sessions = require("client-sessions");
 
 const config = require("../configs/config");
-
-const User = require("./database/models/User");
-const Post = require("./database/models/Post");
 
 // setup app and use middlewares
 const app = express();
@@ -43,15 +41,22 @@ app.use(
 		},
 	})
 );
+
+// Configure passport sessions
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Configure passport sessions
-passport.serializeUser((user, done) => done(null, user.id));
-
-passport.deserializeUser((id, done) => {
-	User.findById(id, (err, user) => done(err, user));
-});
+app.get(
+	"/auth/google",
+	passport.authenticate("google", { scope: ["email", "profile"] })
+);
+app.get(
+	"/auth/google/redirect",
+	passport.authenticate("google", {
+		successRedirect: `http://${config.client.hostname}:${config.client.port}/`,
+		failureRedirect: `http://${config.client.hostname}:${config.client.port}/`,
+	})
+);
 
 // start database connection and server
 const port = config.server.PORT;
