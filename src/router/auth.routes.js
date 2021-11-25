@@ -4,7 +4,7 @@ const passport = require("passport");
 const config = require("../../configs/config");
 
 const isLoggedIn = require("../middleware/isLoggedIn");
-const { logout, checkAuthenticated } = require("../controller/auth");
+const { logout, checkAuthenticated } = require("../controller/auth.controller");
 
 const router = express.Router();
 
