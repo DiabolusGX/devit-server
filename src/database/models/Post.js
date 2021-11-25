@@ -1,10 +1,5 @@
 const { Schema, model, Types } = require("mongoose");
 
-const tagsLimit = 10;
-const imagesLimit = 10;
-const usersTaggedLimit = 20;
-const channelsTaggedLimit = 20;
-
 const Post = new Schema(
 	{
 		author: [

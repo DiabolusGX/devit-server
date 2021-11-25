@@ -8,6 +8,7 @@ const User = new Schema(
 		displayName: { type: String, required: true, maxlength: 100 },
 		avatar: { type: String, maxlength: 1000 },
 		isAlumnus: { type: Boolean, default: false },
+		isActivated: { type: Boolean, default: false },
 		gender: { type: String, enum: ["MALE", "FEMALE", "OTHERS"] },
 		batchYear: { type: String, required: true, maxlength: 10 },
 		phoneNumber: { type: String, maxlength: 10 },

@@ -13,6 +13,7 @@ const checkAuthenticated = (req, res) => {
 			displayName: req.user.displayName,
 			avatar: req.user.avatar,
 			isAlumnus: req.user.isAlumnus,
+			isActivated: req.user.isActivated,
 			gender: req.user.gender,
 			batchYear: req.user.batchYear,
 			phoneNumber: req.user.phoneNumber,
