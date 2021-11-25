@@ -16,7 +16,7 @@ router.get(
 		failureRedirect: config.client.failureRedirectURL,
 	})
 );
-router.get("/logout", isLoggedIn, logout);
+router.post("/logout", isLoggedIn, logout);
 router.get("/check", checkAuthenticated);
 
 module.exports = router;

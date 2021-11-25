@@ -9,7 +9,7 @@ passport.serializeUser((user, done) => done(null, user.id));
 
 // Deserialize User
 passport.deserializeUser(function (id, done) {
-	User.findOne({ id }, (err, user) => done(err, user));
+	User.findById(id, (err, user) => done(err, user));
 });
 
 // Set up Passport Google Strategy
