@@ -23,8 +23,7 @@ passport.use(
 		},
 		async (request, accessToken, refreshToken, profile, cb) => {
 			try {
-				// const email = profile.emails[0].value;
-				const email = "ankit.malik2018@vitbhopal.ac.in";
+				const email = profile.emails[0].value;
 
 				// validate email
 				if (!email.endsWith("@vitbhopal.ac.in")) {
