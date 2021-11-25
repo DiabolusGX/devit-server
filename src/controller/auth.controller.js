@@ -1,27 +1,32 @@
 const logout = (req, res) => {
-    req.logout();
-    res.clearCookie("session");
-    res.json({ message: "Logout successful" });
+	req.logout();
+	res.clearCookie("session");
+	res.json({ message: "Logout successful" });
 };
 
 const checkAuthenticated = (req, res) => {
-    if (req.user) {
-        res.status(200).json({
-            id: req.user._id,
-            discordId: req.user.discordId,
-            username: req.user.username,
-            avatar: req.user.avatar,
-            permissionLevel: req.user.permissionLevel
-        });
-    }
-    else {
-        res.clearCookie("session");
-        res.sendStatus(204);
-    }
+	if (req.user) {
+		res.status(200).json({
+			permissionLevel: req.user.permissionLevel,
+			email: req.user.email,
+			username: req.user.username,
+			displayName: req.user.displayName,
+			avatar: req.user.avatar,
+			isAlumnus: req.user.isAlumnus,
+			gender: req.user.gender,
+			batchYear: req.user.batchYear,
+			phoneNumber: req.user.phoneNumber,
+			bio: req.user.bio,
+			repositories: req.user.repositories,
+			socialLinks: req.user.socialLinks,
+		});
+	} else {
+		res.clearCookie("session");
+		res.sendStatus(204);
+	}
 };
 
-
 module.exports = {
-    logout,
-    checkAuthenticated
+	logout,
+	checkAuthenticated,
 };
