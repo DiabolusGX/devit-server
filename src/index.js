@@ -46,17 +46,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get(
-	"/auth/google",
-	passport.authenticate("google", { scope: ["email", "profile"] })
-);
-app.get(
-	"/auth/google/redirect",
-	passport.authenticate("google", {
-		successRedirect: `http://${config.client.hostname}:${config.client.port}/success`,
-		failureRedirect: `http://${config.client.hostname}:${config.client.port}/failure`,
-	})
-);
+// Routes
+const router = require("./router");
+app.use(router);
 
 // start database connection and server
 const port = config.server.PORT;
