@@ -1,15 +1,10 @@
 const { Schema, model, Types } = require("mongoose");
 
-const Channel = new Schema(
+const Room = new Schema(
 	{
 		name: { type: String, required: true, index: true },
 		topic: { type: String, required: true },
-		type: {
-			type: String,
-			enum: ["QUERY", "DISCUSSION"],
-			default: "DISCUSSION",
-		},
-		room: { type: Types.ObjectId, ref: "Room", index: true },
+		moderators: [{ type: Types.ObjectId, ref: "User" }],
 		createdBy: { type: Types.ObjectId, ref: "User" },
 	},
 	{
@@ -17,4 +12,4 @@ const Channel = new Schema(
 	}
 );
 
-module.exports = model("Channel", Channel);
+module.exports = model("Channel", Room);

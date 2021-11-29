@@ -26,9 +26,9 @@ passport.use(
 				const email = profile.emails[0].value;
 
 				// validate email
-				if (!email.endsWith("@vitbhopal.ac.in")) {
-					return cb("", null);
-				}
+				// if (!email.endsWith("@vitbhopal.ac.in")) {
+				// 	return cb("", null);
+				// }
 
 				const user = await User.findOne({ email });
 
@@ -42,14 +42,14 @@ passport.use(
 					const batchYear = username.slice(-4);
 					const avatar = profile.photos[0]?.value;
 
-					const user = await User.create({
+					const newUser = await User.create({
 						email,
 						username,
 						displayName,
 						batchYear,
 						avatar,
 					});
-					return cb(null, user);
+					return cb(null, newUser);
 				}
 			} catch (err) {
 				console.error("Error while logging the user in:\n", err);
