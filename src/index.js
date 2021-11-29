@@ -48,7 +48,8 @@ app.use(passport.session());
 
 // Routes
 const router = require("./router");
-app.use(router);
+app.use(router.authRouter);
+app.use("/api/v1", router.apiRouter);
 
 // start database connection and server
 const port = config.server.PORT;
