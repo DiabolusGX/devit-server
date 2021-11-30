@@ -10,11 +10,9 @@ const Post = new Schema(
 		},
 		description: { type: String, required: true },
 		attachments: [{ type: String }],
+		channelsTagged: [{ type: Types.ObjectId, ref: "Channel" }],
 		tags: [{ type: Types.ObjectId, ref: "Tag", index: true }],
-		comments: [{ type: Types.ObjectId, ref: "Comment" }],
-		likes: [{ type: Types.ObjectId, ref: "User" }],
 		usersTagged: [{ type: Types.ObjectId, ref: "User", index: true }],
-		channelsTagged: [{ type: Types.ObjectId, ref: "Channel", index: true }],
 	},
 	{
 		timestamps: true,

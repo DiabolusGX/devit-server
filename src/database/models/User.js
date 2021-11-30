@@ -17,11 +17,7 @@ const User = new Schema(
 		githubURL: { type: String },
 		linkedInURL: { type: String },
 		socialLinks: [{ type: String }],
-		friends: [{ type: Types.ObjectId, ref: "User" }],
-		likedPosts: [{ type: Types.ObjectId, ref: "Post" }],
-		savedPosts: [{ type: Types.ObjectId, ref: "Post" }],
 		joinedRooms: [{ type: Types.ObjectId, ref: "Room" }],
-		followingChannels: [{ type: Types.ObjectId, ref: "Channel" }],
 		followingTags: [{ type: Types.ObjectId, ref: "Tag" }],
 	},
 	{

@@ -5,6 +5,7 @@ const Room = new Schema(
 		name: { type: String, required: true, index: true },
 		topic: { type: String, required: true },
 		moderators: [{ type: Types.ObjectId, ref: "User" }],
+		channels: [{ type: Types.ObjectId, ref: "Channel" }],
 		createdBy: { type: Types.ObjectId, ref: "User" },
 	},
 	{
@@ -12,4 +13,4 @@ const Room = new Schema(
 	}
 );
 
-module.exports = model("Channel", Room);
+module.exports = model("Room", Room);
