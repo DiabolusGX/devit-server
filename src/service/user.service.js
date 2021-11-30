@@ -7,13 +7,12 @@ module.exports = {
 	/**
 	 * Activate User and returns updated user.
 	 *
-	 * @param {String} id Target user ID
-	 * @param {Object} data Activation data to be updated
+	 * @param {Request} req Received request
 	 *
 	 * @return {User} Returns updated user.
 	 */
 	activate: async (req) => {
-		const targetUserID = req.user._id;
+		const targetUserID = req.user?._id;
 		const activationData = clean({
 			username: req.body.username,
 			avatar: req.body.avatar,
@@ -27,5 +26,16 @@ module.exports = {
 		const user = await userInternal.activate(targetUserID, activationData);
 
 		return userDto.authInfo(user);
+	},
+	/**
+	 * Check if sent username is available or not.
+	 *
+	 * @param {Request} req Received request
+	 *
+	 * @return {Promise<Boolean>} Returns availability.
+	 */
+	isUsernameAvailable: async (req) => {
+		const targetUsername = req.body.username;
+		return userInternal.isUsernameAvailable(targetUsername);
 	},
 };
