@@ -6,14 +6,22 @@ const Channel = new Schema(
 		topic: { type: String, required: true },
 		type: {
 			type: String,
-			enum: ["QUERY", "DISCUSSION"],
+			enum: ["TEMP", "DISCUSSION"],
 			default: "DISCUSSION",
 		},
-		room: { type: Types.ObjectId, ref: "Room", index: true },
+		expiresAt: { type: Date },
 		createdBy: { type: Types.ObjectId, ref: "User" },
 	},
 	{
 		timestamps: true,
+	}
+);
+
+Channel.index(
+	{ expiresAt: 1 },
+	{
+		expireAfterSeconds: 60 * 60 * 24 * 7,
+		partialFilterExpression: { type: "TEMP" },
 	}
 );
 
