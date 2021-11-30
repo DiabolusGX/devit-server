@@ -8,4 +8,11 @@ module.exports = {
 			.then((updatedUser) => res.status(200).json(updatedUser))
 			.catch((err) => res.status(409).json({ msg: err.message }));
 	},
+	// check if username is available or taken
+	isUsernameAvailable: async (req, res) => {
+		const isAvailable = await userService.isUsernameAvailable(req);
+		res.status(200).json({
+			isAvailable,
+		});
+	},
 };
