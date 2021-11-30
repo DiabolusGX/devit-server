@@ -1,4 +1,5 @@
 const userInternal = require("../database/internal/user");
+const userDto = require("../dto/user.dto");
 
 const clean = require("../utils/cleanObject");
 
@@ -18,11 +19,13 @@ module.exports = {
 			avatar: req.body.avatar,
 			githubURL: req.body.links?.github,
 			linkedInURL: req.body.links?.linkedin,
-			phone: req.body.phone,
+			phoneNumber: req.body.phoneNumber,
 			bio: req.body.bio,
 			gender: req.body.gender?.toUpperCase(),
 		});
 
-		return userInternal.activate(targetUserID, activationData);
+		const user = await userInternal.activate(targetUserID, activationData);
+
+		return userDto.authInfo(user);
 	},
 };
