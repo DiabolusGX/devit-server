@@ -1,6 +1,7 @@
 module.exports = {
 	authInfo: (user) => {
 		return {
+			id: user._id,
 			permissionLevel: user.permissionLevel,
 			username: user.username,
 			displayName: user.displayName,
