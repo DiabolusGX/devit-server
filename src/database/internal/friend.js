@@ -7,7 +7,7 @@ module.exports = {
      * @return {Promise<Number>} Returns user's friends count.
      * @throws {Error} If user is not found.
     */
-    getFriendsCount: (id) => {
+    getFriendsCount: async (id) => {
         return Friend.count({
             $or: [{ from: id }, { to: id }],
             $and: [{ accepted: true }]
