@@ -11,7 +11,7 @@ module.exports = {
     getUsersLearningLevel: async function (id) {
         const learning = [], growing = [], master = [];
         const learningLevels = await LearningLevel.find({ user: id });
-        learningLevels.forEach(data => {
+        learningLevels.forEach(async data => {
             const room = data.room;
             const roomData = await Room.findOne({ _id: room }, { name: 1 });
             const levelData = {

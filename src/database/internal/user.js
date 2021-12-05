@@ -32,7 +32,7 @@ module.exports = {
 	 * @throws {Error} If user is not found.
 	*/
 	getRawData: async (id) => {
-		const user = await User.findById(id).populate("role");
+		const user = await User.findOne({ _id: id });
 		if (!user) {
 			throw new Error("User not found.");
 		}
