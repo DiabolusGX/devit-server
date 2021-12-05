@@ -10,5 +10,30 @@ module.exports = {
 			batchYear: user.batchYear,
 		};
 	},
-	detailedInfo: (user) => user,
+	profileInfo: (user) => {
+		return {
+			id: user._id,
+			permissionLevel: user.permissionLevel,
+			username: user.username,
+			name: user.displayName,
+			avatar: user.avatar,
+			banner: user.banner,
+			isAlumnus: user.isAlumnus,
+			isActivated: user.isActivated,
+			roomAddress: user.roomAddress,
+			batch: user.batchYear,
+			bio: user.bio,
+			email: user.email,
+			phone: user.phone,
+			gender: user.gender,
+			links: {
+				linkedin: user.linkedInURL,
+				github: user.githubURL,
+			},
+			experience: user.experience,
+			learningLevel: user.learningLevel,
+			friendsCountData: user.friendsCountData,
+		}
+	},
+	rawInfo: (user) => user,
 };
