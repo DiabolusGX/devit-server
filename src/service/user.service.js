@@ -52,7 +52,7 @@ module.exports = {
 		const user = await userInternal.getRawData(targetUserID);
 
 		// populate friends count
-		const friendsCountData = await friendService.getCount(targetUserID);
+		const friendsCountData = await friendService.getCount(req);
 		user.friendsCountData = friendsCountData;
 
 		// populate learning level data
