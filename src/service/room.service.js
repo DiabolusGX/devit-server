@@ -8,8 +8,8 @@ module.exports = {
      * @return {Promise<Object>} Returns friend count data
      * @throws {Error} If user not found
     */
-    getUsersLearningLevel: async (req) => {
+    getUserLearningLevel: async (req) => {
         const targetUserID = req.user?._id;
-        return roomInternal.getUsersLearningLevel(targetUserID).catch(console.error);
+        return roomInternal.getUserLearningLevel(targetUserID).catch(console.error);
     }
 };

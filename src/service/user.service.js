@@ -56,7 +56,7 @@ module.exports = {
 		user.friendsCountData = friendsCountData;
 
 		// populate learning level data
-		const learningLevelData = await roomService.getUsersLearningLevel(targetUserID);
+		const learningLevelData = await roomService.getUserLearningLevel(targetUserID);
 		user.learningLevel = learningLevelData;
 
 		return userDto.profileInfo(user);

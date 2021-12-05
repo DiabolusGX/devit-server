@@ -24,8 +24,8 @@ module.exports = {
 			batch: user.batchYear,
 			bio: user.bio,
 			email: user.email,
-			phone: user.phone,
 			gender: user.gender,
+			phone: user.phoneNumber,
 			links: {
 				linkedin: user.linkedInURL,
 				github: user.githubURL,

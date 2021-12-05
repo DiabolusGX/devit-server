@@ -8,7 +8,7 @@ module.exports = {
      * @return {Promise<Number>} Returns user's friends count.
      * @throws {Error} If user is not found.
     */
-    getUsersLearningLevel: async function (id) {
+    getUserLearningLevel: async function (id) {
         const learning = [], growing = [], master = [];
         const learningLevels = await LearningLevel.find({ user: id });
         learningLevels.forEach(async data => {
