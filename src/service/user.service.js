@@ -1,6 +1,9 @@
 const userInternal = require("../database/internal/user");
 const userDto = require("../dto/user.dto");
 
+const friendService = require("./friend.service");
+const roomService = require("./room.service");
+
 const clean = require("../utils/cleanObject");
 
 module.exports = {
@@ -8,9 +11,8 @@ module.exports = {
 	 * Activate User and returns updated user.
 	 *
 	 * @param {Request} req Received request
-	 *
 	 * @return {User} Returns updated user.
-	 */
+	*/
 	activate: async (req) => {
 		const targetUserID = req.user?._id;
 		const activationData = clean({
@@ -31,11 +33,32 @@ module.exports = {
 	 * Check if sent username is available or not.
 	 *
 	 * @param {Request} req Received request
-	 *
 	 * @return {Promise<Boolean>} Returns availability.
-	 */
+	*/
 	isUsernameAvailable: async (req) => {
 		const targetUsername = req.body.username;
 		return userInternal.isUsernameAvailable(targetUsername);
 	},
+	/**
+	 * Gets user data and pupoulate required fields for user profile page
+	 * 
+	 * @param {Request} req Received request
+	 * @return {Promise<User>} Returns user data
+	 * @throws {Error} If user not found
+	*/
+	profile: async (req) => {
+		const targetUserID = req.user?._id;
+		// get raw user data
+		const user = await userInternal.getRawData(targetUserID);
+
+		// populate friends count
+		const friendsCountData = await friendService.getCount(targetUserID);
+		user.friendsCountData = friendsCountData;
+
+		// populate learning level data
+		const learningLevelData = await roomService.getUsersLearningLevel(targetUserID);
+		user.learningLevel = learningLevelData;
+
+		return userDto.profileInfo(user);
+	}
 };

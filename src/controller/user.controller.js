@@ -15,4 +15,11 @@ module.exports = {
 			isAvailable,
 		});
 	},
+	// get user profile
+	profile: async (req, res) => {
+		userService
+			.profile(req)
+			.then((user) => res.status(200).json(user))
+			.catch((err) => res.status(409).json({ msg: err.message }));
+	}
 };
