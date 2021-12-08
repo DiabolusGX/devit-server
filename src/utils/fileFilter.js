@@ -13,13 +13,15 @@ const imageFilter = (dataURI) => {
 	const regex = /^data:.+\/(.+);base64,(.*)$/;
 
 	const matches = dataURI.match(regex);
+	if (!matches) throw Error("Invalid Data URI");
+
 	const ext = matches[1];
 	const data = matches[2];
 
 	// Check valid ext
 	const valid = filetypes.test(ext);
 
-	if (!valid || !ext) throw Error("Invalid Image type!");
+	if (!valid || !ext) throw Error("Invalid Image type");
 
 	return Buffer.from(data, "base64");
 };

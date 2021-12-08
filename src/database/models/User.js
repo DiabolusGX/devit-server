@@ -21,6 +21,7 @@ const User = new Schema(
 		socialLinks: [{ type: String }],
 		experiences: [{
 			type: {
+				uuid: { type: String, required: true },
 				title: { type: String, maxlength: 100 },
 				company: { type: String, maxlength: 100 },
 				description: { type: String, maxlength: 1000 },

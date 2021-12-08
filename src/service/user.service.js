@@ -3,8 +3,9 @@ const userDto = require("../dto/user.dto");
 
 const friendService = require("./friend.service");
 const roomService = require("./room.service");
-
+const aws = require("../aws");
 const clean = require("../utils/cleanObject");
+const fileFilter = require("../utils/fileFilter");
 
 module.exports = {
 	/**
@@ -67,7 +68,7 @@ module.exports = {
 	 * Update user about data.
 	 *
 	 * @param {Request} req Received request
-	 * @return {Promise<User>} Returns updated user data
+	 * @return {Promise<String>} Returns success message
 	 */
 	updateAbout: async (req) => {
 		const targetUserID = req.user?._id;
@@ -79,6 +80,36 @@ module.exports = {
 			linkedInURL: req.body?.links?.linkedin,
 		});
 
-		return userInternal.update(targetUserID, aboutData);
+		await userInternal.update(targetUserID, aboutData);
+		return "Updated about section successfully!";
+	},
+	/**
+	 * Update user header data.
+	 *
+	 * @param {Request} req Received request
+	 * @return {Promise<String>} Returns success message
+	 */
+	updateHeader: async (req) => {
+		const targetUserID = req.user?._id;
+		const body = req.body;
+
+		const newData = {
+			avatar: body.avatar,
+			banner: body.banner,
+			username: body.username,
+			displayName: body.displayName
+		};
+
+		if (!body?.avatar.startsWith("https")) {
+			const imageBuffer = fileFilter.imageFilter(body.avatar);
+			newData.avatar = await aws.uploadImage(imageBuffer);
+		}
+		if (!body?.banner.startsWith("https")) {
+			const imageBuffer = fileFilter.imageFilter(body.banner);
+			newData.banner = await aws.uploadImage(imageBuffer);
+		}
+
+		await userInternal.update(targetUserID, newData);
+		return "Updated header section successfully";
 	},
 };
