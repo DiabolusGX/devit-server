@@ -3,8 +3,9 @@ const userDto = require("../dto/user.dto");
 
 const friendService = require("./friend.service");
 const roomService = require("./room.service");
-
+const aws = require("../aws");
 const clean = require("../utils/cleanObject");
+const fileFilter = require("../utils/fileFilter");
 
 module.exports = {
 	/**
@@ -12,7 +13,7 @@ module.exports = {
 	 *
 	 * @param {Request} req Received request
 	 * @return {User} Returns updated user.
-	*/
+	 */
 	activate: async (req) => {
 		const targetUserID = req.user?._id;
 		const activationData = clean({
@@ -34,18 +35,18 @@ module.exports = {
 	 *
 	 * @param {Request} req Received request
 	 * @return {Promise<Boolean>} Returns availability.
-	*/
+	 */
 	isUsernameAvailable: async (req) => {
 		const targetUsername = req.body.username;
 		return userInternal.isUsernameAvailable(targetUsername);
 	},
 	/**
 	 * Gets user data and pupoulate required fields for user profile page
-	 * 
+	 *
 	 * @param {Request} req Received request
 	 * @return {Promise<User>} Returns user data
 	 * @throws {Error} If user not found
-	*/
+	 */
 	profile: async (req) => {
 		const targetUserID = req.user?._id;
 		// get raw user data
@@ -56,9 +57,59 @@ module.exports = {
 		user.friendsCountData = friendsCountData;
 
 		// populate learning level data
-		const learningLevelData = await roomService.getUserLearningLevel(targetUserID);
+		const learningLevelData = await roomService.getUserLearningLevel(
+			targetUserID
+		);
 		user.learningLevel = learningLevelData;
 
 		return userDto.profileInfo(user);
-	}
+	},
+	/**
+	 * Update user about data.
+	 *
+	 * @param {Request} req Received request
+	 * @return {Promise<String>} Returns success message
+	 */
+	updateAbout: async (req) => {
+		const targetUserID = req.user?._id;
+		const aboutData = clean({
+			bio: req.body.bio,
+			phoneNumber: req.body.phone,
+			roomAddress: req.body.roomAddress,
+			githubURL: req.body?.links?.github,
+			linkedInURL: req.body?.links?.linkedin,
+		});
+
+		await userInternal.update(targetUserID, aboutData);
+		return "Updated about section successfully!";
+	},
+	/**
+	 * Update user header data.
+	 *
+	 * @param {Request} req Received request
+	 * @return {Promise<String>} Returns success message
+	 */
+	updateHeader: async (req) => {
+		const targetUserID = req.user?._id;
+		const body = req.body;
+
+		const newData = {
+			avatar: body.avatar,
+			banner: body.banner,
+			username: body.username,
+			displayName: body.displayName
+		};
+
+		if (!body?.avatar.startsWith("https")) {
+			const imageBuffer = fileFilter.imageFilter(body.avatar);
+			newData.avatar = await aws.uploadImage(imageBuffer);
+		}
+		if (!body?.banner.startsWith("https")) {
+			const imageBuffer = fileFilter.imageFilter(body.banner);
+			newData.banner = await aws.uploadImage(imageBuffer);
+		}
+
+		await userInternal.update(targetUserID, newData);
+		return "Updated header section successfully";
+	},
 };
