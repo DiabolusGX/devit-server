@@ -60,5 +60,23 @@ module.exports = {
 		user.learningLevel = learningLevelData;
 
 		return userDto.profileInfo(user);
-	}
+	},
+	/**
+	 * Update user about data.
+	 * 
+	 * @param {Request} req Received request
+	 * @return {Promise<User>} Returns updated user data
+	*/
+	updateAbout: async (req) => {
+		const targetUserID = req.user?._id;
+		const aboutData = clean({
+			bio: req.body.bio,
+			phoneNumber: req.body.phone,
+			roomAddress: req.body.roomAddress,
+			githubURL: req.body?.links?.github,
+			linkedInURL: req.body?.links?.linkedin,
+		});
+
+		return userInternal.update(targetUserID, aboutData);
+	},
 };

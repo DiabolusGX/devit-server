@@ -37,5 +37,23 @@ module.exports = {
 			throw new Error("User not found.");
 		}
 		return user;
-	}
+	},
+	/**
+	 * Update user's details.
+	 * @param {String} id Target user ID
+	 * @param {Object} data User's data to be updated
+	 * @return {Promise<User>} Returns updated user.
+	 * @throws {Error} If user is not found.
+	*/
+	update: async (id, data) => {
+		const user = await User.findOneAndUpdate(
+			{ _id: id },
+			{ $set: data },
+			{ new: true }
+		);
+		if (!user) {
+			throw new Error("User not found.");
+		}
+		return user;
+	},
 };

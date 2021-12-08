@@ -20,6 +20,13 @@ module.exports = {
 		userService
 			.profile(req)
 			.then((user) => res.status(200).json(user))
-			.catch((err) => res.status(409).json({ msg: err.message }));
+			.catch((err) => res.status(404).json({ msg: err.message }));
+	},
+	// update user profile (about)
+	updateAbout: async (req, res) => {
+		userService
+			.updateAbout(req)
+			.then((updatedUser) => res.status(200).json(updatedUser))
+			.catch((err) => res.status(424).json({ msg: err.message }));
 	}
 };
