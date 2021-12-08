@@ -12,7 +12,7 @@ module.exports = {
 	 *
 	 * @param {Request} req Received request
 	 * @return {User} Returns updated user.
-	*/
+	 */
 	activate: async (req) => {
 		const targetUserID = req.user?._id;
 		const activationData = clean({
@@ -34,18 +34,18 @@ module.exports = {
 	 *
 	 * @param {Request} req Received request
 	 * @return {Promise<Boolean>} Returns availability.
-	*/
+	 */
 	isUsernameAvailable: async (req) => {
 		const targetUsername = req.body.username;
 		return userInternal.isUsernameAvailable(targetUsername);
 	},
 	/**
 	 * Gets user data and pupoulate required fields for user profile page
-	 * 
+	 *
 	 * @param {Request} req Received request
 	 * @return {Promise<User>} Returns user data
 	 * @throws {Error} If user not found
-	*/
+	 */
 	profile: async (req) => {
 		const targetUserID = req.user?._id;
 		// get raw user data
@@ -56,17 +56,19 @@ module.exports = {
 		user.friendsCountData = friendsCountData;
 
 		// populate learning level data
-		const learningLevelData = await roomService.getUserLearningLevel(targetUserID);
+		const learningLevelData = await roomService.getUserLearningLevel(
+			targetUserID
+		);
 		user.learningLevel = learningLevelData;
 
 		return userDto.profileInfo(user);
 	},
 	/**
 	 * Update user about data.
-	 * 
+	 *
 	 * @param {Request} req Received request
 	 * @return {Promise<User>} Returns updated user data
-	*/
+	 */
 	updateAbout: async (req) => {
 		const targetUserID = req.user?._id;
 		const aboutData = clean({

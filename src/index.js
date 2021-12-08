@@ -13,8 +13,8 @@ const config = require("../configs/config");
 const app = express();
 app.use(helmet());
 
-// parse JSON body
-app.use(express.json());
+// parse JSON body with max allowed limit
+app.use(express.json({ limit: "25mb" }));
 
 // cross origin access
 app.use(
