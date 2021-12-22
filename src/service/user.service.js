@@ -121,8 +121,7 @@ module.exports = {
 	 * @return {Promise<[Experience]>} Returns success message
 	 */
 	addExperience: async (req) => {
-		// const targetUserID = req.user?.id;
-		const targetUserID = "61acd3fc68602ce33b60d094";
+		const targetUserID = req.user?.id;
 		const exp = User.addExperience(req.body);
 		if (exp.isCurrent) delete exp.endData;
 		const user = await userInternal.addExperience(targetUserID, exp);
