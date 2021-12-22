@@ -27,13 +27,24 @@ module.exports = {
 		userService
 			.updateAbout(req)
 			.then((msg) => res.status(200).json({ msg }))
-			.catch((err) => res.status(424).json({ msg: err.message }));
+			.catch((err) => res.status(500).json({ msg: err.message }));
 	},
 	// update user profile header
 	updateHeader: async (req, res) => {
 		userService
 			.updateHeader(req)
-			.then((msg) => res.status(200).json({ msg }))
+			.then((updatedHeader) => res.status(200).json(updatedHeader))
 			.catch((err) => res.status(424).json({ msg: err.message }));
+	},
+	// add user experience
+	addExperience: async (req, res) => {
+		userService
+			.addExperience(req)
+			.then((updatedExp) => res.status(200).json(updatedExp))
+			.catch((err) => res.status(500).json({ msg: err.message }));
+	},
+	// delete user experience
+	deleteExperience: async (req, res) => {
+		res.status(200).send("ok");
 	},
 };

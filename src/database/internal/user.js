@@ -1,3 +1,4 @@
+const { v4 } = require("uuid");
 const User = require("../models/User");
 
 module.exports = {
@@ -49,6 +50,26 @@ module.exports = {
 		const user = await User.findOneAndUpdate(
 			{ _id: id },
 			{ $set: data },
+			{ new: true }
+		);
+		if (!user) {
+			throw new Error("User not found.");
+		}
+		return user;
+	},
+	/**
+	 * Add user's experience
+	 * @param {String} id Target user ID
+	 * @param {Object} exp User's experience data
+	 * @return {Promise<User>} Return updated user.
+	 * @throws {Error} If user is not found.
+	 */
+	addExperience: async (id, exp) => {
+		exp.uuid = v4();
+		console.log(exp);
+		const user = await User.findOneAndUpdate(
+			{ _id: id },
+			{ $push: { experiences: exp } },
 			{ new: true }
 		);
 		if (!user) {
