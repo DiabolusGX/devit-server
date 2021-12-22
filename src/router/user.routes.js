@@ -12,7 +12,7 @@ router.get("/profile", isLoggedIn, userController.profile);
 router.patch("/profile/about", isLoggedIn, userController.updateAbout);
 router.patch("/profile/header", isLoggedIn, userController.updateHeader);
 
-router.patch("/experience", isLoggedIn, userController.addExperience);
+router.post("/experience/add", isLoggedIn, userController.addExperience);
 router.delete("/experience/:id", isLoggedIn, userController.deleteExperience);
 
 module.exports = router;

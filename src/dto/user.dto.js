@@ -30,7 +30,7 @@ module.exports = {
 				linkedin: user.linkedInURL,
 				github: user.githubURL,
 			},
-			experience: user.experience,
+			experiences: user.experiences,
 			learningLevel: user.learningLevel,
 			friendsCountData: user.friendsCountData,
 		};
