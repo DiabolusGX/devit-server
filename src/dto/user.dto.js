@@ -15,7 +15,7 @@ module.exports = {
 			id: user._id,
 			permissionLevel: user.permissionLevel,
 			username: user.username,
-			name: user.displayName,
+			displayName: user.displayName,
 			avatar: user.avatar,
 			banner: user.banner,
 			isAlumnus: user.isAlumnus,
@@ -33,7 +33,15 @@ module.exports = {
 			experience: user.experience,
 			learningLevel: user.learningLevel,
 			friendsCountData: user.friendsCountData,
-		}
+		};
+	},
+	headerInfo: (user) => {
+		return {
+			avatar: user.avatar,
+			banner: user.banner,
+			username: user.username,
+			displayName: user.displayName,
+		};
 	},
 	rawInfo: (user) => user,
 };

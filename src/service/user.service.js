@@ -4,6 +4,8 @@ const userDto = require("../dto/user.dto");
 const friendService = require("./friend.service");
 const roomService = require("./room.service");
 const aws = require("../aws");
+
+const { User } = require("../validators");
 const clean = require("../utils/cleanObject");
 const fileFilter = require("../utils/fileFilter");
 
@@ -87,17 +89,17 @@ module.exports = {
 	 * Update user header data.
 	 *
 	 * @param {Request} req Received request
-	 * @return {Promise<String>} Returns success message
+	 * @return {Promise<Object>} Returns success message
 	 */
 	updateHeader: async (req) => {
-		const targetUserID = req.user?._id;
+		const targetUserID = req.user?.id;
 		const body = req.body;
 
 		const newData = {
 			avatar: body.avatar,
 			banner: body.banner,
 			username: body.username,
-			displayName: body.displayName
+			displayName: body.displayName,
 		};
 
 		if (!body?.avatar.startsWith("https")) {
@@ -109,7 +111,22 @@ module.exports = {
 			newData.banner = await aws.uploadImage(imageBuffer);
 		}
 
-		await userInternal.update(targetUserID, newData);
-		return "Updated header section successfully";
+		const user = await userInternal.update(targetUserID, newData);
+		return userDto.headerInfo(user);
+	},
+	/**
+	 * Add user experience in user data.
+	 *
+	 * @param {Request} req Received request
+	 * @return {Promise<[Experience]>} Returns success message
+	 */
+	addExperience: async (req) => {
+		// const targetUserID = req.user?.id;
+		const targetUserID = "61acd3fc68602ce33b60d094";
+		const exp = User.addExperience(req.body);
+		if (exp.isCurrent) delete exp.endData;
+		const user = await userInternal.addExperience(targetUserID, exp);
+		console.log(user.experiences);
+		return user.experiences;
 	},
 };
