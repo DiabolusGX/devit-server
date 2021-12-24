@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const roomInternal = require("../database/internal/room");
 const roomDto = require("../dto/room.dto");
 
@@ -19,8 +20,7 @@ module.exports = {
 		} catch (err) {
 			console.error(err);
 		}
-		const formattedRooms = roomDto.allActiveRooms(rooms);
-		return formattedRooms;
+		return roomDto.allActiveRooms(rooms);
 	},
 	/**
 	 * Gets user's learning technologies (rooms) and levels data.
@@ -34,10 +34,25 @@ module.exports = {
 			.getUserLearningLevel(targetUserID)
 			.catch(console.error);
 	},
+	/**
+	 * Create new room with given input data by an admin.
+	 * @param {Request} req Recieved request
+	 * @returns {Promise<Object>} Returns new room object
+	 */
 	createNewRoom: async (req) => {
 		const newRoomData = roomDto.newRoom(req.body);
 		newRoomData.createdBy = req.user._id;
-		const room = await roomInternal.createNewRoom(newRoomData);
-		return room;
+		return roomInternal.createNewRoom(newRoomData);
 	},
+	/**
+	 * Join a room by room ID.
+	 * @param {Request} req Received request
+	 * @returns {Promise<Object>} Returns joined room object
+	 * @throws {Error} If room not found
+	 */
+	joinRoom: async (req) => {
+		const targetUserID = req.user?._id;
+		const roomID = req.params.roomID;
+		return roomInternal.joinRoom(targetUserID, roomID);
+	}
 };

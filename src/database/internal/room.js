@@ -10,8 +10,7 @@ module.exports = {
 	 */
 	createNewRoom: async (roomData) => {
 		const newRoom = new Room(roomData);
-		const room = await newRoom.save();
-		return room;
+		return newRoom.save();
 	},
 	/**
 	 * Get user's friends and friend requests count.
@@ -48,8 +47,7 @@ module.exports = {
 	 * @returns {Promise<[Object]>} Returns all active rooms
 	 */
 	getAllActiveRooms: async () => {
-		const allRooms = await Room.find().catch(console.error);
-		return allRooms;
+		return Room.find().catch(console.error);
 	},
 	/**
 	 * Find member count of particular room by ID.
@@ -57,19 +55,21 @@ module.exports = {
 	 * @returns {Promise<Number>} Returns member count
 	 */
 	getRoomMemberCount: async (roomID) => {
-		console.log(roomID);
-		const count = await User.where({
-			joinedRooms: { $in: ["61c5f6703d588acdb951e322"] },
-		})
-			.countDocuments()
-			.catch(console.error);
-		console.log(count);
-		const res = await User.find({
-			joinedRooms: `61c5f6703d588acdb951e322`,
-		});
-		const z = await User.find().select({ joinedRooms: 1 });
-		console.log(res);
-		console.log(z);
-		return count;
+		return User.find({ joinedRooms: roomID }).countDocuments();
 	},
+	/**
+	 * Join a room by user ID and room ID.
+	 * @param {String} userID User ID to join room
+	 * @param {String} roomID Room ID to join
+	 * @returns {Promise<Object>} Returns promise for updated user object
+	 */
+	joinRoom: async (userID, roomID) => {
+		const user = await User.findOneAndUpdate(
+			{ _id: userID },
+			{ $push: { joinedRooms: roomID } },
+			{ new: true }
+		);
+		if (!user) throw new Error("User not found");
+		return user;
+	}
 };

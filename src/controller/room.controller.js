@@ -15,4 +15,11 @@ module.exports = {
 			.then((room) => res.status(200).json(room))
 			.catch((err) => res.status(500).json({ msg: err.message }));
 	},
+	// join a room
+	joinRoom: async (req, res) => {
+		roomService
+			.joinRoom(req)
+			.then((user) => res.status(200).json(user))
+			.catch((err) => res.status(500).json({ msg: err.message }));
+	}
 };

@@ -128,7 +128,7 @@ module.exports = {
 	 */
 	deleteExperience: async (req) => {
 		const targetUserID = req.user._id;
-		const expToDelete = req.params.id;
+		const expToDelete = req.params.expID;
 		await userInternal.deleteExperience(targetUserID, expToDelete);
 		return "Successfully deleted experience.";
 	},
