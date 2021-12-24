@@ -12,9 +12,8 @@ const fileFilter = require("../utils/fileFilter");
 module.exports = {
 	/**
 	 * Activate User and returns updated user.
-	 *
 	 * @param {Request} req Received request
-	 * @return {User} Returns updated user.
+	 * @return {Promise<User>} Returns updated user.
 	 */
 	activate: async (req) => {
 		const targetUserID = req.user?._id;
@@ -34,7 +33,6 @@ module.exports = {
 	},
 	/**
 	 * Check if sent username is available or not.
-	 *
 	 * @param {Request} req Received request
 	 * @return {Promise<Boolean>} Returns availability.
 	 */
@@ -44,7 +42,6 @@ module.exports = {
 	},
 	/**
 	 * Gets user data and pupoulate required fields for user profile page
-	 *
 	 * @param {Request} req Received request
 	 * @return {Promise<User>} Returns user data
 	 * @throws {Error} If user not found
@@ -68,7 +65,6 @@ module.exports = {
 	},
 	/**
 	 * Update user about data.
-	 *
 	 * @param {Request} req Received request
 	 * @return {Promise<String>} Returns success message
 	 */
@@ -87,7 +83,6 @@ module.exports = {
 	},
 	/**
 	 * Update user header data.
-	 *
 	 * @param {Request} req Received request
 	 * @return {Promise<Object>} Returns success message
 	 */
@@ -116,16 +111,25 @@ module.exports = {
 	},
 	/**
 	 * Add user experience in user data.
-	 *
 	 * @param {Request} req Received request
-	 * @return {Promise<[Experience]>} Returns success message
+	 * @return {Promise<[Experience]>} Returns all experiences array
 	 */
 	addExperience: async (req) => {
 		const targetUserID = req.user?.id;
 		const exp = User.addExperience(req.body);
 		if (exp.isCurrent) delete exp.endData;
 		const user = await userInternal.addExperience(targetUserID, exp);
-		console.log(user.experiences);
 		return user.experiences;
+	},
+	/**
+	 * Remove particular experience data from user.
+	 * @param {Request} req Received reques
+	 * @return {Promise<String>} Returns success message
+	 */
+	deleteExperience: async (req) => {
+		const targetUserID = req.user._id;
+		const expToDelete = req.params.expID;
+		await userInternal.deleteExperience(targetUserID, expToDelete);
+		return "Successfully deleted experience.";
 	},
 };

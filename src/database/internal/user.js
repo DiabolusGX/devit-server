@@ -7,7 +7,7 @@ module.exports = {
 	 *
 	 * @param {String} id Target user ID
 	 * @param {Object} data Activation data to be updated
-	 * @return {User} Returns updated user.
+	 * @return {Promise<User>} Returns updated user.
 	 */
 	activate: async (id, data) => {
 		return User.findOneAndUpdate(
@@ -66,10 +66,26 @@ module.exports = {
 	 */
 	addExperience: async (id, exp) => {
 		exp.uuid = v4();
-		console.log(exp);
 		const user = await User.findOneAndUpdate(
 			{ _id: id },
 			{ $push: { experiences: exp } },
+			{ new: true }
+		);
+		if (!user) {
+			throw new Error("User not found.");
+		}
+		return user;
+	},
+	/**
+	 * Delete user's particular experience
+	 * @param {String} id Target user ID
+	 * @param {String} expID Experience ID to delete
+	 * @return {Promise<User>} Return updated user.
+	 */
+	deleteExperience: async (id, expID) => {
+		const user = await User.findOneAndUpdate(
+			{ _id: id },
+			{ $pull: { experiences: { uuid: expID } } },
 			{ new: true }
 		);
 		if (!user) {
