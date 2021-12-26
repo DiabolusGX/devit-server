@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
 const roomInternal = require("../database/internal/room");
+const userInternal = require("../database/internal/user");
 const roomDto = require("../dto/room.dto");
 
 module.exports = {
@@ -51,8 +51,26 @@ module.exports = {
 	 * @throws {Error} If room not found
 	 */
 	joinRoom: async (req) => {
+		// check if user is already in the room
+		if (req.user?.joinedRooms?.includes(req.body?.roomID?.toString())) {
+			throw new Error("You are already in this room");
+		}
+
+		// join room by room ID
 		const targetUserID = req.user?._id;
-		const roomID = req.params.roomID;
-		return roomInternal.joinRoom(targetUserID, roomID);
+		const roomID = req.body?.roomID;
+		if (!roomID) throw new Error("Room ID is required");
+		await roomInternal.joinRoom(targetUserID, roomID);
+
+		// set new learning level for given room
+		const learningLevel = req.body?.learningLevel;
+		if (!learningLevel) throw new Error("Learning level is required");
+		await userInternal.setNewUserLearningLevel(
+			targetUserID,
+			roomID,
+			learningLevel
+		);
+
+		return "Successfully Joined New Room";
 	}
 };

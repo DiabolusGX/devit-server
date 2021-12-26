@@ -57,7 +57,7 @@ module.exports = {
 
 		// populate learning level data
 		const learningLevelData = await roomService.getUserLearningLevel(
-			targetUserID
+			req
 		);
 		user.learningLevel = learningLevelData;
 
@@ -124,12 +124,12 @@ module.exports = {
 	/**
 	 * Remove particular experience data from user.
 	 * @param {Request} req Received reques
-	 * @return {Promise<String>} Returns success message
+	 * @return {Promise<[Experience]>} Returns all experiences array
 	 */
 	deleteExperience: async (req) => {
 		const targetUserID = req.user._id;
 		const expToDelete = req.params.expID;
-		await userInternal.deleteExperience(targetUserID, expToDelete);
-		return "Successfully deleted experience.";
+		const user = await userInternal.deleteExperience(targetUserID, expToDelete);
+		return user.experiences;
 	},
 };

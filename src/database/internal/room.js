@@ -14,32 +14,34 @@ module.exports = {
 	},
 	/**
 	 * Get user's friends and friend requests count.
-	 * @param {String} id Target user ID
+	 * @param {String} userID Target user ID
 	 * @return {Promise<Number>} Returns user's friends count.
 	 * @throws {Error} If user is not found.
 	 */
-	getUserLearningLevel: async function (id) {
+	getUserLearningLevel: async function (userID) {
 		const learning = [],
 			growing = [],
-			master = [];
-		const learningLevels = await LearningLevel.find({ user: id });
-		learningLevels.forEach(async (data) => {
-			const room = data.room;
-			const roomData = await Room.findOne({ _id: room }, { name: 1 });
-			const levelData = {
-				id: room,
-				name: roomData.name,
-				level: data.level,
-			};
+			mastering = [];
+		const learningLevels = await LearningLevel.find({ user: userID });
+		await Promise.all(
+			learningLevels.map(async (learningData) => {
+				const roomID = learningData.room;
+				const roomData = await Room.findOne({ _id: roomID }, { name: 1 });
+				const levelData = {
+					id: roomID,
+					name: roomData.name,
+					level: learningData.level,
+				};
 
-			if (data.level === "LEARNING") learning.push(levelData);
-			else if (data.level === "GROWING") growing.push(levelData);
-			else if (data.level === "MASTER") master.push(levelData);
-		});
+				if (learningData.level === "LEARNING") learning.push(levelData);
+				else if (learningData.level === "GROWING") growing.push(levelData);
+				else if (learningData.level === "MASTERING") mastering.push(levelData);
+			})
+		);
 		return {
 			learning,
 			growing,
-			master,
+			mastering,
 		};
 	},
 	/**
