@@ -8,6 +8,6 @@ const router = express.Router();
 
 router.get("/", isLoggedIn, roomController.getAllRooms);
 router.post("/create", isAdmin, roomController.createNewRoom);
-router.post("/join/:roomID", isLoggedIn, roomController.joinRoom);
+router.post("/join", isLoggedIn, roomController.joinRoom);
 
 module.exports = router;

@@ -47,7 +47,7 @@ module.exports = {
 	deleteExperience: async (req, res) => {
 		userService
 			.deleteExperience(req)
-			.then((msg) => res.status(200).json({ msg }))
+			.then((updatedExp) => res.status(200).json(updatedExp))
 			.catch((err) => res.status(424).json({ msg: err.message }));
 	},
 };

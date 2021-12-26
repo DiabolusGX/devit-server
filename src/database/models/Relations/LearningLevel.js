@@ -4,7 +4,7 @@ const LearningLevel = new Schema(
     {
         user: { type: Types.ObjectId, ref: "User", index: true },
         room: { type: Types.ObjectId, ref: "Room", index: true },
-        level: { type: String, enum: ["MASTER", "GROWING", "LEARNING"], default: "LEARNING" },
+        level: { type: String, enum: ["MASTERING", "GROWING", "LEARNING"], default: "LEARNING" },
     },
     {
         timestamps: true,

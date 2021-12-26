@@ -1,5 +1,6 @@
 const { v4 } = require("uuid");
 const User = require("../models/User");
+const LearningLevel = require("../models/Relations/LearningLevel");
 
 module.exports = {
 	/**
@@ -93,4 +94,20 @@ module.exports = {
 		}
 		return user;
 	},
+	/**
+	 * Add new user's particular room's learning level.
+	 * @param {String} userID Target user ID
+	 * @param {String} roomID Target room ID
+	 * @param {Object} level User's level data
+	 * @returns {Promise<String>} Return success message.
+	 */
+	setNewUserLearningLevel: async (userID, roomID, level) => {
+		const newLevel = new LearningLevel({
+			user: userID,
+			room: roomID,
+			level,
+		});
+		newLevel.save();
+		return "User's level added successfully.";
+	}
 };
