@@ -5,6 +5,7 @@ const friendController = require("../controller/friend.controller");
 
 const router = express.Router();
 
+router.get("/suggestions", isLoggedIn, friendController.suggestions);
 router.post("/add/:userID", isLoggedIn, friendController.addFriend);
 router.post("/remove/:userID", isLoggedIn, friendController.removeFriend);
 router.post("/request/accept/:reqID", isLoggedIn, friendController.acceptReq);

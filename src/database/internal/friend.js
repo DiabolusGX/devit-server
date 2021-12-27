@@ -5,6 +5,15 @@ const mongoose = require("mongoose");
 
 module.exports = {
 	/**
+	 * Get users suggestions to add as friends.
+	 * @param {String} userID Logged in user ID
+	 * @returns {Promise<[Object]>} 10 randon users
+	 */
+	suggestions: async (_userID) => {
+		const users = await User.find().limit(10);
+		return users;
+	},
+	/**
 	 * Get user's friends and friend requests count.
 	 * @param {String} userID Target user ID
 	 * @return {Promise<Number>} Returns user's friends count.

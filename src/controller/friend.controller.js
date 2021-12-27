@@ -1,6 +1,13 @@
 const friendService = require("../service/friend.service");
 
 module.exports = {
+	// suggest users for add friend
+	suggestions: async (req, res) => {
+		friendService
+			.suggestions(req)
+			.then((users) => res.status(200).json(users))
+			.catch((err) => res.status(500).json({ msg: err.message }));
+	},
 	// send friend request
 	addFriend: async (req, res) => {
 		friendService

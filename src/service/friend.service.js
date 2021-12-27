@@ -1,7 +1,12 @@
-const { Error } = require("mongoose");
 const friendInternal = require("../database/internal/friend");
+const friendDto = require("../dto/friend.dto");
 
 module.exports = {
+	suggestions: async (req) => {
+		const userID = req.user?._id;
+		const users = await friendInternal.suggestions(userID);
+		return friendDto.suggestions(users);
+	},
 	/**
 	 * Gets user's friends count data
 	 * @param {Request} req Received request
