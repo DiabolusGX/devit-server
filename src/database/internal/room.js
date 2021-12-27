@@ -57,7 +57,7 @@ module.exports = {
 	 * @returns {Promise<Number>} Returns member count
 	 */
 	getRoomMemberCount: async (roomID) => {
-		return User.find({ joinedRooms: roomID }).countDocuments();
+		return User.count({ joinedRooms: roomID });
 	},
 	/**
 	 * Join a room by user ID and room ID.
