@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/activate", isLoggedIn, userController.activate);
 router.post("/check-username", isLoggedIn, userController.isUsernameAvailable);
 
-router.get("/profile", isLoggedIn, userController.profile);
+router.get("/profile/:userID", userController.profile);
 router.patch("/profile/about", isLoggedIn, userController.updateAbout);
 router.patch("/profile/header", isLoggedIn, userController.updateHeader);
 
