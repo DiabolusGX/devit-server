@@ -43,11 +43,19 @@ module.exports = {
 	/**
 	 * Gets user data and pupoulate required fields for user profile page
 	 * @param {Request} req Received request
-	 * @return {Promise<User>} Returns user data
+	 * @return {Promise<Object>} Returns user data
 	 * @throws {Error} If user not found
 	 */
 	profile: async (req) => {
-		const targetUserID = req.user?._id;
+		let targetUserID;
+		if (req.params?.userID) {
+			targetUserID = req.params.userID;
+		} else if (req.user?._id) {
+			targetUserID = req.user?._id;
+		} else {
+			throw new Error("Missing target User ID");
+		}
+
 		// get raw user data
 		const user = await userInternal.getRawData(targetUserID);
 
@@ -56,9 +64,7 @@ module.exports = {
 		user.friendsCountData = friendsCountData;
 
 		// populate learning level data
-		const learningLevelData = await roomService.getUserLearningLevel(
-			req
-		);
+		const learningLevelData = await roomService.getUserLearningLevel(req);
 		user.learningLevel = learningLevelData;
 
 		return userDto.profileInfo(user);
@@ -129,7 +135,11 @@ module.exports = {
 	deleteExperience: async (req) => {
 		const targetUserID = req.user._id;
 		const expToDelete = req.params.expID;
-		const user = await userInternal.deleteExperience(targetUserID, expToDelete);
+		if (!expToDelete) throw new Error("Missing experience ID");
+		const user = await userInternal.deleteExperience(
+			targetUserID,
+			expToDelete
+		);
 		return user.experiences;
 	},
 };

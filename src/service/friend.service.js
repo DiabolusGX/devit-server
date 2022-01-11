@@ -42,12 +42,49 @@ module.exports = {
 		await friendInternal.addFriend(senderUserID, recieverUserID);
 		return "Friend Request Sent Successfully";
 	},
+	/**
+	 * Remove given user from friend list
+	 * @param {Request} req Incoming request
+	 * @returns {Promise<String>} Success message
+	 */
 	removeFriend: async (req) => {
 		const userID = req.user?._id;
 		const targetFriendID = req.params?.userID;
 		if (!targetFriendID) throw new Error("Target User ID is required");
 		await friendInternal.removeFriend(userID, targetFriendID);
 		return "Friend Removed successfully";
+	},
+	/**
+	 * Get user's all incoming friend requests
+	 * @param {Request} req Incoming request
+	 * @returns {Promise<[Object]>} All friend req users
+	 */
+	getIncomingRequests: async (req) => {
+		const userID = req.user?._id;
+		const users = await friendInternal.getIncomingRequests(userID);
+		const formattedUsers = [];
+		await Promise.all(
+			users.map((user) => {
+				formattedUsers.push(friendDto.requestUser(user));
+			})
+		);
+		return formattedUsers;
+	},
+	/**
+	 * Get user's all outgoing friend requests
+	 * @param {Request} req Incoming request
+	 * @returns {Promise<[Object]>} All friend req users
+	 */
+	getOutgoingRequests: async (req) => {
+		const userID = req.user?._id;
+		const users = await friendInternal.getOutgoingRequests(userID);
+		const formattedUsers = [];
+		await Promise.all(
+			users.map((user) => {
+				formattedUsers.push(friendDto.requestUser(user));
+			})
+		);
+		return formattedUsers;
 	},
 	/**
 	 * Accept incoming friend request to logged in user with given friend request ID.

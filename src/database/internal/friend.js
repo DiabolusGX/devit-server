@@ -49,6 +49,28 @@ module.exports = {
 		});
 	},
 	/**
+	 * Get user's incoming friend request users.
+	 * @param {String} userID Target user ID
+	 * @return {Promise<[Object]>} Returns user's incoming friend request users.
+	 */
+	getIncomingRequests: async (userID) => {
+		return Friend.find({
+			to: userID,
+			accepted: false,
+		});
+	},
+	/**
+	 * Get user's outgoing friend request users.
+	 * @param {String} userID Target user ID
+	 * @return {Promise<[Object]>} Returns user's outgoing friend request users.
+	 */
+	getOutgoingRequests: async (userID) => {
+		return Friend.find({
+			from: userID,
+			accepted: false,
+		});
+	},
+	/**
 	 * Send friend request if not friend and no friend req exists.
 	 * @param {String} senderUserID Friend req sender user ID
 	 * @param {String} recieverUserID Friend req reciever / target user ID

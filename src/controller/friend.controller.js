@@ -22,6 +22,20 @@ module.exports = {
 			.then((msg) => res.status(200).json({ msg }))
 			.catch((err) => res.status(500).json({ msg: err.message }));
 	},
+	// get all incoming friend requests
+	getIncomingReq: async (req, res) => {
+		friendService
+			.getIncomingRequests(req)
+			.then((data) => res.status(200).json(data))
+			.catch((err) => res.status(500).json({ msg: err.message }));
+	},
+	// get all outgoing friend requests
+	getOutgoingReq: async (req, res) => {
+		friendService
+			.getOutgoingRequests(req)
+			.then((data) => res.status(200).json(data))
+			.catch((err) => res.status(500).json({ msg: err.message }));
+	},
 	// accept incoming friend request
 	acceptReq: async (req, res) => {
 		friendService
