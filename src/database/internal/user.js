@@ -28,13 +28,13 @@ module.exports = {
 		return !isAvailable;
 	},
 	/**
-	 * Get user's pupulated details.
-	 * @param {String} id Target user ID
-	 * @return {Promise<User>} Returns user's populated details.
+	 * Get user's raw db document.
+	 * @param {String} username Target username
+	 * @return {Promise<User>} Returns user's raw document.
 	 * @throws {Error} If user is not found.
 	 */
-	getRawData: async (id) => {
-		const user = await User.findOne({ _id: id });
+	getUserDataByUsername: async (username) => {
+		const user = await User.findOne({ username });
 		if (!user) {
 			throw new Error("User not found.");
 		}
@@ -57,6 +57,14 @@ module.exports = {
 			throw new Error("User not found.");
 		}
 		return user;
+	},
+	/**
+	 * Get all users with user ids in array
+	 * @param {[String]} userIDs Array of userIDs
+	 * @returns {Promise<[Object]>} Returns user objects
+	 */
+	getAllUsersWithID: async (userIDs) => {
+		return User.find({ _id: { $in: userIDs } });
 	},
 	/**
 	 * Add user's experience
@@ -109,5 +117,5 @@ module.exports = {
 		});
 		newLevel.save();
 		return "User's level added successfully.";
-	}
+	},
 };
