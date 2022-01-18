@@ -1,11 +1,19 @@
 const friendInternal = require("../database/internal/friend");
+const userInternal = require("../database/internal/user");
 const friendDto = require("../dto/friend.dto");
 
 module.exports = {
 	suggestions: async (req) => {
 		const userID = req.user?._id;
-		const users = await friendInternal.suggestions(userID);
-		return friendDto.suggestions(users);
+		const formattedUsers = [];
+		await Promise.all(
+			users.map((user) => {
+				console.log(user._id, userID, user._id === userID);
+				if (user._id.toString() !== userID)
+					formattedUsers.push(friendDto.friendUser(user));
+			})
+		);
+		return formattedUsers;
 	},
 	/**
 	 * Gets user's friends count data
@@ -61,11 +69,18 @@ module.exports = {
 	 */
 	getIncomingRequests: async (req) => {
 		const userID = req.user?._id;
-		const users = await friendInternal.getIncomingRequests(userID);
+		const friendRequests = await friendInternal.getIncomingRequests(userID);
+		const userIDs = [];
+		await Promise.all(
+			friendRequests.map((friendRequest) =>
+				userIDs.push(friendRequest.to)
+			)
+		);
+		const users = await userInternal.getAllUsersWithID(userIDs);
 		const formattedUsers = [];
 		await Promise.all(
 			users.map((user) => {
-				formattedUsers.push(friendDto.requestUser(user));
+				formattedUsers.push(friendDto.friendUser(user));
 			})
 		);
 		return formattedUsers;
@@ -77,11 +92,18 @@ module.exports = {
 	 */
 	getOutgoingRequests: async (req) => {
 		const userID = req.user?._id;
-		const users = await friendInternal.getOutgoingRequests(userID);
+		const friendRequests = await friendInternal.getOutgoingRequests(userID);
+		const userIDs = [];
+		await Promise.all(
+			friendRequests.map((friendRequest) =>
+				userIDs.push(friendRequest.to)
+			)
+		);
+		const users = await userInternal.getAllUsersWithID(userIDs);
 		const formattedUsers = [];
 		await Promise.all(
 			users.map((user) => {
-				formattedUsers.push(friendDto.requestUser(user));
+				formattedUsers.push(friendDto.friendUser(user));
 			})
 		);
 		return formattedUsers;

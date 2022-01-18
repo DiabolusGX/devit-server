@@ -47,17 +47,9 @@ module.exports = {
 	 * @throws {Error} If user not found
 	 */
 	profile: async (req) => {
-		let targetUserID;
-		if (req.params?.userID) {
-			targetUserID = req.params.userID;
-		} else if (req.user?._id) {
-			targetUserID = req.user?._id;
-		} else {
-			throw new Error("Missing target User ID");
-		}
-
+		const targetUsername = req.params?.username;
 		// get raw user data
-		const user = await userInternal.getRawData(targetUserID);
+		const user = await userInternal.getUserDataByUsername(targetUsername);
 
 		// populate friends count
 		const friendsCountData = await friendService.getCount(req);
