@@ -6,9 +6,9 @@ module.exports = {
 	suggestions: async (req) => {
 		const userID = req.user?._id;
 		const formattedUsers = [];
+		const users = await friendInternal.suggestions(userID);
 		await Promise.all(
 			users.map((user) => {
-				console.log(user._id, userID, user._id === userID);
 				if (user._id.toString() !== userID)
 					formattedUsers.push(friendDto.friendUser(user));
 			})
